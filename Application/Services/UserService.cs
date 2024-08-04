@@ -13,20 +13,43 @@ namespace Application.Services
 
         public void CreateCustomer()
         {
-            string name = Validation.GetInput("name");
-            string surname = Validation.GetInput("surname");
-            string pin = Validation.GetInput("pin", Validation.IsValidPin);
-            string seriaNumber = Validation.GetInput("seria number", Validation.IsValidSeriaNumber);
-            string number = Validation.GetInput("phone number", NumberRegex.IsValidNumber);
-            string email = Validation.GetInput("email", EmailRegex.IsValidEmail);
-            string password = Validation.GetInput("password", PasswordRegex.IsValidPassword);
+            string name = GetUserInput.GetInput("name");
+            string surname = GetUserInput.GetInput("surname");
 
-            if (CheckExistance(pin, seriaNumber, email, number))
+        PinLanel: string pin = GetUserInput.GetInput("pin", Validations.IsValidPin);
+            if (_unitOfWork.Customer.GetUserByPin(pin) is not null || _unitOfWork.Seller.GetUserByPin(pin) is not null)
             {
-                Console.WriteLine("This inputs already exist");
-                return;
+                Messages.Exist("This", "pin");
+                goto PinLanel;
             }
 
+        SeriaLabel: string seriaNumber = GetUserInput.GetInput("seria number", Validations.IsValidSeriaNumber);
+
+            if (_unitOfWork.Customer.GetUserBySeriaNumber(seriaNumber) is not null || _unitOfWork.Seller.GetUserBySeriaNumber(seriaNumber) is not null)
+            {
+                Messages.Exist("This", "seria");
+                goto SeriaLabel;
+            }
+
+
+        NumberLabel: string number = GetUserInput.GetInput("phone number", NumberRegex.IsValidNumber);
+
+            if (_unitOfWork.Customer.GetUserByNumber(number) is not null || _unitOfWork.Seller.GetUserByNumber(number) is not null)
+            {
+                Messages.Exist("This", "number");
+                goto NumberLabel;
+            }
+
+        EmailLabel: string email = GetUserInput.GetInput("email", EmailRegex.IsValidEmail);
+
+            if (_unitOfWork.Customer.GetUserByEmail(email) is not null || _unitOfWork.Seller.GetUserByEmail(email) is not null)
+            {
+                Messages.Exist("This", "email");
+                goto EmailLabel;
+            }
+
+            string password = GetUserInput.GetInput("password", PasswordRegex.IsValidPassword);
+   
             E.Customer customer = new()
             {
                 Name = name,
@@ -49,19 +72,42 @@ namespace Application.Services
 
         public void CreateSeller()
         {
-            string name = Validation.GetInput("name");
-            string surname = Validation.GetInput("surname");
-            string pin = Validation.GetInput("pin", Validation.IsValidPin);
-            string seriaNumber = Validation.GetInput("seria number", Validation.IsValidSeriaNumber);
-            string number = Validation.GetInput("phone number", NumberRegex.IsValidNumber);
-            string email = Validation.GetInput("email", EmailRegex.IsValidEmail);
-            string password = Validation.GetInput("password", PasswordRegex.IsValidPassword);
+            string name = GetUserInput.GetInput("name");
+            string surname = GetUserInput.GetInput("surname");
 
-            if (CheckExistance(pin, seriaNumber, email, number))
+            PinLanel: string pin = GetUserInput.GetInput("pin", Validations.IsValidPin);
+            if (_unitOfWork.Customer.GetUserByPin(pin) is not null || _unitOfWork.Seller.GetUserByPin(pin) is not null)
             {
-                Console.WriteLine("This inputs already exist");
-                return;
+                Messages.Exist("This", "pin");
+                goto PinLanel;
             }
+
+            SeriaLabel: string seriaNumber = GetUserInput.GetInput("seria number", Validations.IsValidSeriaNumber);
+
+            if (_unitOfWork.Customer.GetUserBySeriaNumber(seriaNumber) is not null || _unitOfWork.Seller.GetUserBySeriaNumber(seriaNumber) is not null)
+            {
+                Messages.Exist("This", "seria");
+                goto SeriaLabel;
+            }
+
+
+            NumberLabel: string number = GetUserInput.GetInput("phone number", NumberRegex.IsValidNumber);
+
+            if (_unitOfWork.Customer.GetUserByNumber(number) is not null || _unitOfWork.Seller.GetUserByNumber(number) is not null)
+            {
+                Messages.Exist("This", "number");
+                goto NumberLabel;
+            }
+
+            EmailLabel: string email = GetUserInput.GetInput("email", EmailRegex.IsValidEmail);
+
+            if (_unitOfWork.Customer.GetUserByEmail(email) is not null || _unitOfWork.Seller.GetUserByEmail(email) is not null)
+            {
+                Messages.Exist("This", "email");
+                goto EmailLabel;
+            }
+
+            string password = GetUserInput.GetInput("password", PasswordRegex.IsValidPassword);
 
             E.Seller seller = new()
             {
@@ -83,15 +129,15 @@ namespace Application.Services
                 Messages.SuccessMessage("account", "created");
         }
 
-        private bool CheckExistance(string pin, string seriaNumber, string email, string number)
-        {
-            return _unitOfWork.Customer.GetUserByPin(pin) is not null || _unitOfWork.Customer.GetUserByPin(seriaNumber) is not null || _unitOfWork.Customer.GetUserByPin(number) is not null || _unitOfWork.Customer.GetUserByPin(email) is not null || _unitOfWork.Seller.GetUserByPin(pin) is not null || _unitOfWork.Seller.GetUserByPin(seriaNumber) is not null || _unitOfWork.Seller.GetUserByPin(number) is not null || _unitOfWork.Seller.GetUserByPin(email) is not null;
-        }
+        //private bool CheckExistance(string pin, string seriaNumber, string email, string number)
+        //{
+        //    return _unitOfWork.Customer.GetUserByPin(pin) is not null || _unitOfWork.Customer.GetUserByPin(seriaNumber) is not null || _unitOfWork.Customer.GetUserByPin(number) is not null || _unitOfWork.Customer.GetUserByPin(email) is not null || _unitOfWork.Seller.GetUserByPin(pin) is not null || _unitOfWork.Seller.GetUserByPin(seriaNumber) is not null || _unitOfWork.Seller.GetUserByPin(number) is not null || _unitOfWork.Seller.GetUserByPin(email) is not null;
+        //}
 
         public E.Customer? LoginAsCustomer()
         {
-            string email = Validation.GetInput("email", EmailRegex.IsValidEmail);
-            string password = Validation.GetInput("password", PasswordRegex.IsValidPassword);
+            string email = GetUserInput.GetInput("email", EmailRegex.IsValidEmail);
+            string password = GetUserInput.GetInput("password", PasswordRegex.IsValidPassword);
 
             E.Customer? customer = _unitOfWork.Customer.GetUserByEmail(email);
 
@@ -116,8 +162,8 @@ namespace Application.Services
 
         public E.Seller? LoginAsSeller()
         {
-            string email = Validation.GetInput("email", EmailRegex.IsValidEmail);
-            string password = Validation.GetInput("password", PasswordRegex.IsValidPassword);
+            string email = GetUserInput.GetInput("email", EmailRegex.IsValidEmail);
+            string password = GetUserInput.GetInput("password", PasswordRegex.IsValidPassword);
 
             E.Seller? seller = _unitOfWork.Seller.GetUserByEmail(email);
 
@@ -141,8 +187,8 @@ namespace Application.Services
 
         public E.Admin? LoginAdmin()
         {
-            string email = Validation.GetInput("email", EmailRegex.IsValidEmail);
-            string password = Validation.GetInput("password", PasswordRegex.IsValidPassword);
+            string email = GetUserInput.GetInput("email", EmailRegex.IsValidEmail);
+            string password = GetUserInput.GetInput("password", PasswordRegex.IsValidPassword);
 
             E.Admin? admin = _unitOfWork.Admin.GetAdminByEmail(email);
 
@@ -174,7 +220,7 @@ namespace Application.Services
                 Console.WriteLine($"{s.Id,-20}{s.Email,-20}");
             }
 
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
             E.Seller? seller = _unitOfWork.Seller.Get(id);
 
             if (seller is null)

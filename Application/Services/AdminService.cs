@@ -1,4 +1,5 @@
-﻿namespace Application.Services
+﻿
+namespace Application.Services
 {
     public class AdminService
     {
@@ -11,7 +12,7 @@
 
         public void AddCategory()
         {
-        NameLabel: string name = Validation.GetInput("name");
+        NameLabel: string name = GetUserInput.GetInput("name");
 
             if (_unitOfWork.Category.GetAll().FirstOrDefault(x => x.Name == name) is not null)
             {
@@ -43,7 +44,7 @@
         public void ShowSellerOrders()
         {
             ShowAllSellers();
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
 
             E.Seller? seller = _unitOfWork.Seller.GetWithOrders(id);
 
@@ -63,7 +64,7 @@
         public void ShowCustomerOrders()
         {
             ShowAllCustomers();
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
 
             E.Customer? customer = _unitOfWork.Customer.GetCustomerWithOrder(id);
 
@@ -102,7 +103,7 @@
         public void ShowDetailed(int id = default)
         {
             if (id == default)
-                id = Validation.GetNumber<int>("id");
+                id = GetUserInput.GetNumber<int>("id");
 
             E.Category? category = _unitOfWork.Category.GetWithProducts(id);
 
@@ -123,7 +124,7 @@
         public void DeleteCustomer()
         {
             ShowAllCustomers();
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
 
             E.Customer? user = _unitOfWork.Customer.Get(id);
 
@@ -133,7 +134,7 @@
                 return;
             }
 
-            char choice = Validation.GetOpinion("customer", "delete");
+            char choice = GetUserInput.GetOpinion("customer", "delete");
 
             if (choice.Equals('y'))
             {
@@ -147,7 +148,7 @@
         public void DeleteSeller()
         {
             ShowAllSellers();
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
 
             E.Seller? user = _unitOfWork.Seller.Get(id);
 
@@ -157,7 +158,7 @@
                 return;
             }
 
-            char choice = Validation.GetOpinion("seller", "delete");
+            char choice = GetUserInput.GetOpinion("seller", "delete");
 
             if (choice.Equals('y'))
             {

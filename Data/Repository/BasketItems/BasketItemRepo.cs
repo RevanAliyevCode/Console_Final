@@ -1,4 +1,6 @@
-﻿namespace Data.Repository.BasketItems
+﻿using Data.Contexts;
+
+namespace Data.Repository.BasketItems
 {
     public class BasketItemRepo : Repository<E.Basket.BasketItem>, IBasketItemRepo
     {

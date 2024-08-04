@@ -1,4 +1,6 @@
 ﻿
+using Data.Contexts;
+
 namespace Data.Repository.Admin
 {
     public class AdminRepo : Repository<E.Admin>, IAdminRepo

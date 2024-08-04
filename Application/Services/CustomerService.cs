@@ -110,7 +110,7 @@ namespace Application.Services
                 return;
             }
 
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
             BasketItem? basketItem = _unitOfWork.BasketItem.GetWhere(b => b.BasketId == basket.Id && b.Id == id).FirstOrDefault();
 
             if (basketItem is null)
@@ -123,7 +123,7 @@ namespace Application.Services
 
             product.Stock += basketItem.Quantity;
 
-            int quantity = Validation.GetNumber<int>("quantity");
+            int quantity = GetUserInput.GetNumber<int>("quantity");
 
             if (quantity < 0) return;
             if (product.Stock < quantity)
@@ -150,7 +150,7 @@ namespace Application.Services
                 return;
             }
 
-            int id = Validation.GetNumber<int>("id");
+            int id = GetUserInput.GetNumber<int>("id");
             BasketItem? basketItem = _unitOfWork.BasketItem.GetWhere(b => b.BasketId == basket.Id && b.Id == id).FirstOrDefault();
 
             if (basketItem is null)
@@ -161,7 +161,7 @@ namespace Application.Services
 
             E.Product product = _unitOfWork.Product.Get(basketItem.ProductId);
 
-            char choice = Validation.GetOpinion("basket item", "delete");
+            char choice = GetUserInput.GetOpinion("basket item", "delete");
 
             if (choice.Equals('y'))
             {
@@ -206,7 +206,7 @@ namespace Application.Services
 
         public void ShowSearchedProducts()
         {
-            string query = Validation.GetInput("query");
+            string query = GetUserInput.GetInput("query");
             List<E.Product> products = _unitOfWork.Product.GetWhere(p => p.Name.Contains(query)).ToList();
 
             Console.WriteLine($"{"Id",-20}{"Name",-20}{"Price",-20}");
@@ -229,7 +229,7 @@ namespace Application.Services
             Console.WriteLine(customer.Name + " " + customer.Surname);
             Console.WriteLine($"Orders ({customer.Orders.Count}): ");
             Console.WriteLine($"{"Product name",-20}{"Seller",-20}{"Quantity",-20}{"Total amount",-20}{"Status",-20}");
-            foreach (var order in customer.Orders)
+            foreach (var order in customer.Orders.OrderByDescending(o => o.CreatedDate))
                 Console.WriteLine($"{order.Product.Name,-20}{order.Seller.Name,-20}{order.Quantity, -20}{order.TotalAmount,-20}{order.Status}");
         }
 
@@ -311,7 +311,7 @@ namespace Application.Services
         {
             ShowAllProducts();
             Console.WriteLine("Write 0 for exit");
-            int id = Validation.GetNumber<int>();
+            int id = GetUserInput.GetNumber<int>();
             if (id == 0) return;
 
             ShowProduct(id);
@@ -319,7 +319,7 @@ namespace Application.Services
             Console.WriteLine("0.Back");
             Console.WriteLine("1.Add to basket");
             Console.WriteLine("2.Add to basket with any quantity");
-            int choice = Validation.GetNumber<int>();
+            int choice = GetUserInput.GetNumber<int>();
 
             switch (choice)
             {
@@ -329,7 +329,7 @@ namespace Application.Services
                     AddBasketItem(userId, id);
                     break;
                 case 2:
-                    int quantity = Validation.GetNumber<int>("quantity");
+                    int quantity = GetUserInput.GetNumber<int>("quantity");
                     if (quantity < 0) break;
                     AddBasketItem(userId, id, quantity);
                     break;
@@ -347,7 +347,7 @@ namespace Application.Services
             Console.WriteLine("1.Update quantity");
             Console.WriteLine("2.Remove item");
             Console.WriteLine("3.Checkout to order");
-            int choice = Validation.GetNumber<int>();
+            int choice = GetUserInput.GetNumber<int>();
 
             switch (choice)
             {

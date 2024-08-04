@@ -5,4 +5,6 @@ global using Core.Validates;
 global using Core.Entities.Base;
 global using Core.Entities;
 global using E = Core.Entities;
+global using Core.Utils;
+
 

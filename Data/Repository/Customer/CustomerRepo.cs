@@ -1,4 +1,5 @@
-﻿using Data.Repository.User;
+﻿using Data.Contexts;
+using Data.Repository.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repository.Customer

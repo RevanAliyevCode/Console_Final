@@ -29,7 +29,7 @@ namespace Application.Services
             Console.WriteLine(seller.Name + " " + seller.Surname);
             Console.WriteLine($"Orders ({seller.Orders.Count}): ");
             Console.WriteLine($"{"Id",-20}{"Product name",-20}{"Buyer",-20}{"Quantity",-20}{"Total Amount",-20}{"Status",-20}");
-            foreach (var order in seller.Orders)
+            foreach (var order in seller.Orders.OrderByDescending(o => o.CreatedDate))
                 Console.WriteLine($"{order.Id,-20}{order.Product.Name,-20}{order.Customer.Name,-20}{order.Quantity,-20}{order.TotalAmount,-20}{order.Status,-20}");
 
             UpdateOrderStatus(id);
@@ -73,13 +73,13 @@ namespace Application.Services
 
         public void AddProduct(int sellerId)
         {
-            string name = Validation.GetInput("name");
-            string description = Validation.GetInput("description");
-            int stock = Validation.GetNumber<int>("stock");
-            decimal price = Validation.GetNumber<decimal>("price");
+            string name = GetUserInput.GetInput("name");
+            string description = GetUserInput.GetInput("description");
+            int stock = GetUserInput.GetNumber<int>("stock");
+            decimal price = GetUserInput.GetNumber<decimal>("price");
 
         CategoryLable: ShowCategoryAll();
-            int categoryId = Validation.GetNumber<int>("category id");
+            int categoryId = GetUserInput.GetNumber<int>("category id");
 
             E.Category? category = _unitOfWork.Category.Get(categoryId);
 
@@ -126,7 +126,7 @@ namespace Application.Services
         {
             ShowSellerProducts(id);
 
-            int productId = Validation.GetNumber<int>("product id");
+            int productId = GetUserInput.GetNumber<int>("product id");
 
             E.Product? product = _unitOfWork.Product.Get(productId);
 
@@ -136,7 +136,7 @@ namespace Application.Services
                 return;
             }
 
-            char choice = Validation.GetOpinion("product", "delete");
+            char choice = GetUserInput.GetOpinion("product", "delete");
 
             if (choice.Equals('y'))
             {
@@ -164,7 +164,7 @@ namespace Application.Services
         {
             ShowSellerProducts(id);
 
-            int productId = Validation.GetNumber<int>("product id");
+            int productId = GetUserInput.GetNumber<int>("product id");
 
             E.Product? product = _unitOfWork.Product.Get(productId);
 
@@ -174,20 +174,20 @@ namespace Application.Services
                 return;
             }
 
-            char choice = Validation.GetOpinion("stock", "change");
+            char choice = GetUserInput.GetOpinion("stock", "change");
 
             if (choice.Equals('y'))
             {
-                int stock = Validation.GetNumber<int>("new stock");
+                int stock = GetUserInput.GetNumber<int>("new stock");
 
                 product.Stock = stock;
             }
 
-            choice = Validation.GetOpinion("price", "change");
+            choice = GetUserInput.GetOpinion("price", "change");
 
             if (choice.Equals('y'))
             {
-                decimal price = Validation.GetNumber<decimal>("new price");
+                decimal price = GetUserInput.GetNumber<decimal>("new price");
 
                 product.Price = price;
             }
@@ -202,7 +202,7 @@ namespace Application.Services
         {
             E.Seller? seller = _unitOfWork.Seller.GetWithOrders(userId);
 
-            int orderId = Validation.GetNumber<int>("order id for change status (0 for exit)");
+            int orderId = GetUserInput.GetNumber<int>("order id for change status (0 for exit)");
 
             E.Order? order = _unitOfWork.Order.Get(orderId);
 
@@ -216,7 +216,7 @@ namespace Application.Services
             Console.WriteLine("2.Processing");
             Console.WriteLine("3.Shipped");
             Console.WriteLine("4.Delivered");
-            Console.WriteLine("Write order status: ");
+            Console.Write("Write order status: ");
             bool isSucceded = Enum.TryParse<Status>(Console.ReadLine(), out Status result);
 
             if (!isSucceded)

@@ -2,10 +2,12 @@
 using Core.Concrets;
 using Core.Concrets.Enums;
 using Core.Entities;
+using Core.Utils;
 using Core.Menus;
 using Core.Validates;
 using Data;
 using Data.UnitOfWork;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Commerse_App
 {
@@ -27,7 +29,7 @@ namespace Commerse_App
             while (true)
             {
                 DefaultMenu.Menu();
-                DefaultOperations choice = (DefaultOperations)Validation.GetNumber<int>();
+                DefaultOperations choice = (DefaultOperations)GetUserInput.GetNumber<int>();
 
                 switch (choice)
                 {
@@ -60,10 +62,13 @@ namespace Commerse_App
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("----CUSTOMER MENU----");
+                Console.ResetColor();
+
                 Console.WriteLine("0.Exit");
                 CustomerMenu.Menu();
-                CustomerOperations operations = (CustomerOperations)Validation.GetNumber<int>();
+                CustomerOperations operations = (CustomerOperations)GetUserInput.GetNumber<int>();
 
                 switch (operations)
                 {
@@ -105,10 +110,12 @@ namespace Commerse_App
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("----SELLER MENU----");
+                Console.ResetColor();
                 Console.WriteLine("0.Exit");
                 SellerMenu.Menu();
-                SellerOperations operations = (SellerOperations)Validation.GetNumber<int>();
+                SellerOperations operations = (SellerOperations)GetUserInput.GetNumber<int>();
                 switch (operations)
                 {
                     case (SellerOperations)DefaultOperations.Exit:
@@ -148,10 +155,11 @@ namespace Commerse_App
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("----ADMIN MENU----");
                 Console.WriteLine("0.Exit");
                 AdminMenu.Menu();
-                AdminOperations operations = (AdminOperations)Validation.GetNumber<int>();
+                AdminOperations operations = (AdminOperations)GetUserInput.GetNumber<int>();
                 switch (operations)
                 {
                     case (AdminOperations)DefaultOperations.Exit:
@@ -205,7 +213,7 @@ namespace Commerse_App
 //{
 //    ShowProductsService.ShowAllProducts();
 //    Console.WriteLine("Write 0 for exit");
-//    int id = Validation.GetNumber<int>();
+//    int id = GetUserInput.GetNumber<int>();
 //    if (id == 0) return;
 
 //    ShowProductsService.ShowProduct(id);
@@ -213,7 +221,7 @@ namespace Commerse_App
 //    Console.WriteLine("0.Back");
 //    Console.WriteLine("1.Add to basket");
 //    Console.WriteLine("2.Add to basket with any quantity");
-//    int choice = Validation.GetNumber<int>();
+//    int choice = GetUserInput.GetNumber<int>();
 
 //    switch (choice)
 //    {
@@ -223,7 +231,7 @@ namespace Commerse_App
 //            BasketService.AddBasketItem(userId, id);
 //            break;
 //        case 2:
-//            int quantity = Validation.GetNumber<int>("quantity");
+//            int quantity = GetUserInput.GetNumber<int>("quantity");
 //            BasketService.AddBasketItem(userId, id, quantity);
 //            break;
 //        default:
@@ -240,7 +248,7 @@ namespace Commerse_App
 //    Console.WriteLine("1.Update quantity");
 //    Console.WriteLine("2.Remove item");
 //    Console.WriteLine("3.Checkout to order");
-//    int choice = Validation.GetNumber<int>();
+//    int choice = GetUserInput.GetNumber<int>();
 
 //    switch (choice)
 //    {
